@@ -1,24 +1,24 @@
-package org.oobootcamp.warmup.length;
+package org.oobootcamp.core.parkinglot;
 
 import org.junit.jupiter.api.Test;
-import org.oobootcamp.warmup.parkingLot.Car;
-import org.oobootcamp.warmup.parkingLot.Exceptions.CarNotFoundException;
-import org.oobootcamp.warmup.parkingLot.Exceptions.ParkingLotUnavailableException;
-import org.oobootcamp.warmup.parkingLot.ParkingLot;
-import org.oobootcamp.warmup.parkingLot.Ticket;
+import org.oobootcamp.core.parkinglot.Exceptions.InvalidTicketException;
+import org.oobootcamp.core.parkinglot.Exceptions.NoParkingLotException;
+import org.oobootcamp.core.parkinglot.Exceptions.ParkingLotUnavailableException;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
 
 public class GraduateParkingBoyTest {
     //给停车小弟三个停车场1（容量为1，空的）、停车场2（容量为1，空的）、停车场3（容量为1，空的），和一辆车1；让停车小弟停车时；停车成功，获得停车场1的停车票1
     @Test
     public void should_parking_success_and_get_a_ticket_when_parking_given_a_graduate_parking_boy_and_3_available_parking_lot() {
         //given
-        ParkingLot parkingLot1 = new ParkingLot(1);
+        ParkingLot parkingLot1 = spy(new ParkingLot(1));
         ParkingLot parkingLot2 = new ParkingLot(1);
         ParkingLot parkingLot3 = new ParkingLot(1);
         List<ParkingLot> parkingLots = List.of(parkingLot1, parkingLot2, parkingLot3);
@@ -29,6 +29,8 @@ public class GraduateParkingBoyTest {
         Ticket ticket = parkingBoy.park(car);
         //then
         assertThat(ticket.getCarNo()).isEqualTo(carNo);
+        verify(parkingLot1).park(car);
+
     }
 
     //给停车小弟三个停车场1（容量为1，满的）、停车场2（容量为1，空的）、停车场3（容量为1，空的），和一辆车1；让停车小弟停车时；停车成功，获得停车场2的停车票2
@@ -37,7 +39,7 @@ public class GraduateParkingBoyTest {
         //given
         ParkingLot parkingLot1 = new ParkingLot(1);
         parkingLot1.park(new Car("陕A T123"));
-        ParkingLot parkingLot2 = new ParkingLot(1);
+        ParkingLot parkingLot2 = spy(new ParkingLot(1));
         ParkingLot parkingLot3 = new ParkingLot(1);
         List<ParkingLot> parkingLots = List.of(parkingLot1, parkingLot2, parkingLot3);
         GraduateParkingBoy parkingBoy = new GraduateParkingBoy(parkingLots);
@@ -47,10 +49,11 @@ public class GraduateParkingBoyTest {
         Ticket ticket = parkingBoy.park(car);
         //then
         assertThat(ticket.getCarNo()).isEqualTo(carNo);
+        verify(parkingLot2).park(car);
         //没有验证是停车场2的停车票，是因为客户不关心票上的这个信息
     }
 
-    //给停车小弟三个停车场1（容量为1，满的）、停车场2（容量为1，满的）、停车场3（容量为1，空的），和一辆车1；让停车小弟停车时；停车成功，获得停车场3的停车票3
+    ////    //给停车小弟三个停车场1（容量为1，满的）、停车场2（容量为1，满的）、停车场3（容量为1，空的），和一辆车1；让停车小弟停车时；停车成功，获得停车场3的停车票3
     @Test
     public void should_parking_success_and_get_a_ticket_when_parking_given_a_graduate_parking_boy_and_2_unavailable_parking_lot_1_available_parking_lot() {
         //given
@@ -69,14 +72,15 @@ public class GraduateParkingBoyTest {
         assertThat(ticket.getCarNo()).isEqualTo(carNo);
     }
 
-    //给停车小弟两个停车场1（容量为1，空的）、停车场2（容量为1，满的），和一辆车1；让停车小弟停车时；停车成功，获得停车场1的停车票1
+    //    //给停车小弟两个停车场1（容量为1，空的）、停车场2（容量为1，满的）、停车场3（容量为1，空的），和一辆车1；让停车小弟停车时；停车成功，获得停车场1的停车票1
     @Test
     public void should_parking_success_and_get_a_ticket_when_parking_given_a_graduate_parking_boy_and_first_available_parking_lot_and_second_unavailable_parking_lot() {
         //given
         ParkingLot parkingLot1 = new ParkingLot(1);
         ParkingLot parkingLot2 = new ParkingLot(1);
+        ParkingLot parkingLot3 = new ParkingLot(1);
         parkingLot2.park(new Car("陕A T123"));
-        List<ParkingLot> parkingLots = List.of(parkingLot1, parkingLot2);
+        List<ParkingLot> parkingLots = List.of(parkingLot1, parkingLot2, parkingLot3);
         GraduateParkingBoy parkingBoy = new GraduateParkingBoy(parkingLots);
         String carNo = "陕A T234";
         Car car = new Car(carNo);
@@ -86,7 +90,7 @@ public class GraduateParkingBoyTest {
         assertThat(ticket.getCarNo()).isEqualTo(carNo);
     }
 
-    //给停车小弟一个停车场1（容量为1，满的），和一辆车1；让停车小弟停车时；停车失败，返回“所有停车场已满”
+    //    //给停车小弟一个停车场1（容量为1，满的），和一辆车1；让停车小弟停车时；停车失败，返回“所有停车场已满”
     @Test
     public void should_parking_failed_with_parking_lot_unavailable_exception_when_parking_given_a_graduate_parking_boy_and_1_unavailable_parking_lot() {
         //given
@@ -141,7 +145,7 @@ public class GraduateParkingBoyTest {
         GraduateParkingBoy parkingBoy = new GraduateParkingBoy(parkingLots);
         Ticket fakeTicket = new Ticket("AKLJSK");
         //when
-        assertThrows(CarNotFoundException.class, () -> parkingBoy.pickUpCar(fakeTicket));
+        assertThrows(InvalidTicketException.class, () -> parkingBoy.pickUpCar(fakeTicket));
     }
 
 

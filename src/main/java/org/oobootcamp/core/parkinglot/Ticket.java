@@ -1,7 +1,7 @@
-package org.oobootcamp.warmup.parkingLot;
+package org.oobootcamp.core.parkinglot;
 
 public class Ticket {
-    private String carNo;
+    private final String carNo;
 
     public Ticket(String carNo) {
         this.carNo = carNo;

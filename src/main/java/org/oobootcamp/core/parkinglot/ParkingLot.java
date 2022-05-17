@@ -1,18 +1,19 @@
-package org.oobootcamp.warmup.parkingLot;
+package org.oobootcamp.core.parkinglot;
 
-import org.oobootcamp.warmup.parkingLot.Exceptions.CarNotFoundException;
-import org.oobootcamp.warmup.parkingLot.Exceptions.DuplicateParkingException;
-import org.oobootcamp.warmup.parkingLot.Exceptions.ParkingLotUnavailableException;
+import org.oobootcamp.core.parkinglot.Exceptions.CarNotFoundException;
+import org.oobootcamp.core.parkinglot.Exceptions.DuplicateParkingException;
+import org.oobootcamp.core.parkinglot.Exceptions.ParkingLotUnavailableException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 public class ParkingLot {
 
     private final int totalCount;
 
-    private List<Car> cars = new ArrayList<>();
+    private final List<Car> cars = new ArrayList<>();
 
     public ParkingLot(int count) {
         this.totalCount = count;
@@ -44,5 +45,13 @@ public class ParkingLot {
         }
         cars.remove(car.get());
         return car;
+    }
+
+    public boolean isFull() {
+        return cars.size() == totalCount;
+    }
+
+    public boolean containCar(Ticket ticket) {
+        return cars.stream().anyMatch(car -> Objects.equals(car.getCarNo(), ticket.getCarNo()));
     }
 }

@@ -1,11 +1,12 @@
-package org.oobootcamp.warmup.parkingLot;
+package org.oobootcamp.core.parkinglot;
 
 public class Car {
     public String getCarNo() {
         return carNo;
     }
 
-    private String carNo;
+    private final String carNo;
+
     public Car(String carNo) {
         this.carNo = carNo;
     }
