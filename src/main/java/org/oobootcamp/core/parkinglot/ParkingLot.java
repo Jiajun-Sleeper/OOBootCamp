@@ -7,7 +7,6 @@ import org.oobootcamp.core.parkinglot.Exceptions.ParkingLotUnavailableException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 public class ParkingLot {
 
@@ -23,27 +22,20 @@ public class ParkingLot {
         if (cars.size() == totalCount) {
             throw new ParkingLotUnavailableException();
         }
-        checkDuplicateParking(car);
+        if (cars.stream().anyMatch(car1 -> car1.getCarNo().equals(car.getCarNo()))) {
+            throw new DuplicateParkingException();
+        }
+
         cars.add(car);
         return new Ticket(car.getCarNo());
     }
 
-    private void checkDuplicateParking(Car car) {
-        Optional<Car> parkedCar = cars.stream().filter(car1 -> car1.getCarNo().equals(car.getCarNo())).findFirst();
-        if (parkedCar.isPresent()) {
-            throw new DuplicateParkingException();
-        }
-
-    }
-
-    public Optional<Car> pickUpCar(Ticket ticket) {
+    public Car pick(Ticket ticket) {
         String carNo = ticket.getCarNo();
 
-        Optional<Car> car = cars.stream().filter(c -> c.getCarNo().equals(carNo)).findAny();
-        if (car.isEmpty()) {
-            throw new CarNotFoundException();
-        }
-        cars.remove(car.get());
+        Car car = cars.stream().filter(c -> c.getCarNo().equals(carNo)).findFirst().orElseThrow(CarNotFoundException::new);
+        cars.remove(car);
+
         return car;
     }
 

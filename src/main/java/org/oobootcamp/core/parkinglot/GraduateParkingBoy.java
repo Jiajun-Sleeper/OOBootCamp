@@ -1,7 +1,7 @@
 package org.oobootcamp.core.parkinglot;
 
 import org.oobootcamp.core.parkinglot.Exceptions.InvalidTicketException;
-import org.oobootcamp.core.parkinglot.Exceptions.NoParkingLotException;
+import org.oobootcamp.core.parkinglot.Exceptions.NoParkingPlantException;
 import org.oobootcamp.core.parkinglot.Exceptions.ParkingLotUnavailableException;
 
 import java.util.List;
@@ -16,13 +16,13 @@ public class GraduateParkingBoy {
 
     public Ticket park(Car car) {
         if (parkingLots.size() == 0) {
-            throw new NoParkingLotException();
+            throw new NoParkingPlantException();
         }
         return parkingLots.stream().filter(parkingLot -> !parkingLot.isFull()).findFirst().orElseThrow(ParkingLotUnavailableException::new).park(car);
     }
 
-    public Car pickUpCar(Ticket ticket) {
-        return parkingLots.stream().filter(parkingLot -> parkingLot.containCar(ticket)).findFirst().orElseThrow(InvalidTicketException::new).pickUpCar(ticket).get();
+    public Car pick(Ticket ticket) {
+        return parkingLots.stream().filter(parkingLot -> parkingLot.containCar(ticket)).findFirst().orElseThrow(InvalidTicketException::new).pick(ticket);
     }
 
 }

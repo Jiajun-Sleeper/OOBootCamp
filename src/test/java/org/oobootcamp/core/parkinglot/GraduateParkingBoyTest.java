@@ -2,7 +2,7 @@ package org.oobootcamp.core.parkinglot;
 
 import org.junit.jupiter.api.Test;
 import org.oobootcamp.core.parkinglot.Exceptions.InvalidTicketException;
-import org.oobootcamp.core.parkinglot.Exceptions.NoParkingLotException;
+import org.oobootcamp.core.parkinglot.Exceptions.NoParkingPlantException;
 import org.oobootcamp.core.parkinglot.Exceptions.ParkingLotUnavailableException;
 
 import java.util.ArrayList;
@@ -113,7 +113,7 @@ public class GraduateParkingBoyTest {
         String carNo = "陕A T234";
         Car car = new Car(carNo);
         //when
-        assertThrows(NoParkingLotException.class, () -> parkingBoy.park(car));
+        assertThrows(NoParkingPlantException.class, () -> parkingBoy.park(car));
     }
 
     //给停车小弟三个停车场1（容量为1，满的）、停车场2（容量为1，满的）、停车场3（容量为1，满的），和一张停车票2（车2停在停车场2）；让停车小弟取车时；取车成功，获得车2
@@ -130,7 +130,7 @@ public class GraduateParkingBoyTest {
         List<ParkingLot> parkingLots = List.of(parkingLot1, parkingLot2, parkingLot3);
         GraduateParkingBoy parkingBoy = new GraduateParkingBoy(parkingLots);
         //when
-        Car returnCar = parkingBoy.pickUpCar(myTicket);
+        Car returnCar = parkingBoy.pick(myTicket);
         //then
         assertThat(myCar.getCarNo()).isEqualTo(returnCar.getCarNo());
     }
@@ -145,7 +145,7 @@ public class GraduateParkingBoyTest {
         GraduateParkingBoy parkingBoy = new GraduateParkingBoy(parkingLots);
         Ticket fakeTicket = new Ticket("AKLJSK");
         //when
-        assertThrows(InvalidTicketException.class, () -> parkingBoy.pickUpCar(fakeTicket));
+        assertThrows(InvalidTicketException.class, () -> parkingBoy.pick(fakeTicket));
     }
 
 

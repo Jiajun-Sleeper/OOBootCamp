@@ -6,7 +6,6 @@ import org.oobootcamp.core.parkinglot.Exceptions.CarNotFoundException;
 import org.oobootcamp.core.parkinglot.Exceptions.DuplicateParkingException;
 import org.oobootcamp.core.parkinglot.Exceptions.ParkingLotUnavailableException;
 
-import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -63,11 +62,11 @@ public class ParkingLotTest {
         Ticket ticket = parkingLot.park(myCar);
 
         //when
-        Optional<Car> car = parkingLot.pickUpCar(ticket);
+        Car car = parkingLot.pick(ticket);
 
         //then
-        Assertions.assertTrue(car.isPresent());
-        Assertions.assertEquals(myCar.getCarNo(), car.get().getCarNo());
+        Assertions.assertNotNull(car);
+        Assertions.assertEquals(myCar.getCarNo(), car.getCarNo());
     }
 
     @Test
@@ -77,7 +76,7 @@ public class ParkingLotTest {
         Ticket ticket = new Ticket("陕A 12SF32");
 
         //when
-        assertThrows(CarNotFoundException.class, () -> parkingLot.pickUpCar(ticket));
+        assertThrows(CarNotFoundException.class, () -> parkingLot.pick(ticket));
     }
 
     @Test
