@@ -6,7 +6,7 @@ import org.oobootcamp.core.parkinglot.Exceptions.ParkingLotUnavailableException;
 
 import java.util.List;
 
-public class GraduateParkingBoy {
+public class GraduateParkingBoy extends ParkingBoy{
     private final List<ParkingLot> parkingLots;
 
     public GraduateParkingBoy(List<ParkingLot> parkingLots) {
