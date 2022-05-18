@@ -2,6 +2,7 @@ package org.oobootcamp.core.parkinglot;
 
 import org.junit.jupiter.api.Test;
 import org.oobootcamp.core.parkinglot.Exceptions.InvalidTicketException;
+import org.oobootcamp.core.parkinglot.Exceptions.ParkingLotUnavailableException;
 
 import java.util.List;
 
@@ -76,8 +77,7 @@ public class SmartyParkingBoyTest {
         Car car = new Car("陕A T123");
         //when
         //then
-        assertThrows(NoAvailableParkingLotException.class, () -> parkingBoy.park(car));
-
+        assertThrows(ParkingLotUnavailableException.class, () -> parkingBoy.park(car));
     }
 
     //Given：两个停车场1（容量为1，满的）、停车场2（容量为1，满的）和一张停车票2（车2停在停车场2）；

@@ -5,6 +5,7 @@ import org.oobootcamp.core.parkinglot.Exceptions.DuplicateParkingException;
 import org.oobootcamp.core.parkinglot.Exceptions.ParkingLotUnavailableException;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -13,6 +14,14 @@ public class ParkingLot {
     private final int totalCount;
 
     private final List<Car> cars = new ArrayList<>();
+
+    public int getTotalCount() {
+        return totalCount;
+    }
+
+    public List<Car> getCars() {
+        return cars;
+    }
 
     public ParkingLot(int count) {
         this.totalCount = count;
@@ -45,5 +54,19 @@ public class ParkingLot {
 
     public boolean containCar(Ticket ticket) {
         return cars.stream().anyMatch(car -> Objects.equals(car.getCarNo(), ticket.getCarNo()));
+    }
+
+
+    public static class FreeParkingSpaceComparator implements Comparator<ParkingLot> {
+
+        @Override
+        public int compare(ParkingLot val1, ParkingLot val2) {
+            return calculateVacancyRate(val1).compareTo(calculateVacancyRate(val2));
+        }
+
+        private static Integer calculateVacancyRate(ParkingLot parkingLot) {
+            return parkingLot.getTotalCount() - parkingLot.getCars().size();
+        }
+
     }
 }
