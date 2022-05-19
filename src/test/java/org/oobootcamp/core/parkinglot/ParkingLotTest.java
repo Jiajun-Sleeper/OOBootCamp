@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.oobootcamp.core.parkinglot.Exceptions.CarNotFoundException;
 import org.oobootcamp.core.parkinglot.Exceptions.DuplicateParkingException;
-import org.oobootcamp.core.parkinglot.Exceptions.ParkingLotUnavailableException;
+import org.oobootcamp.core.parkinglot.Exceptions.ParkingLotIsFullException;
 
 import java.util.UUID;
 
@@ -39,7 +39,7 @@ public class ParkingLotTest {
         String carNo = "陕A T123";
         Car car = new Car(carNo);
         //when
-        assertThrows(ParkingLotUnavailableException.class, () -> parkingLot.park(car));
+        assertThrows(ParkingLotIsFullException.class, () -> parkingLot.park(car));
     }
 
     @Test

@@ -3,7 +3,7 @@ package org.oobootcamp.core.parkinglot;
 import org.junit.jupiter.api.Test;
 import org.oobootcamp.core.parkinglot.Exceptions.InvalidTicketException;
 import org.oobootcamp.core.parkinglot.Exceptions.NoParkingPlantException;
-import org.oobootcamp.core.parkinglot.Exceptions.ParkingLotUnavailableException;
+import org.oobootcamp.core.parkinglot.Exceptions.ParkingLotIsFullException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -92,7 +92,7 @@ public class GraduateParkingBoyTest {
 
     //    //给停车小弟一个停车场1（容量为1，满的），和一辆车1；让停车小弟停车时；停车失败，返回“所有停车场已满”
     @Test
-    public void should_parking_failed_with_parking_lot_unavailable_exception_when_parking_given_a_graduate_parking_boy_and_1_unavailable_parking_lot() {
+    public void should_parking_failed_with_parking_lot_Is_Full_exception_when_parking_given_a_graduate_parking_boy_and_1_unavailable_parking_lot() {
         //given
         ParkingLot parkingLot1 = new ParkingLot(1);
         parkingLot1.park(new Car("陕A T123"));
@@ -101,7 +101,7 @@ public class GraduateParkingBoyTest {
         String carNo = "陕A T234";
         Car car = new Car(carNo);
         //when
-        assertThrows(ParkingLotUnavailableException.class, () -> parkingBoy.park(car));
+        assertThrows(ParkingLotIsFullException.class, () -> parkingBoy.park(car));
     }
 
     //不给小弟停车场，和一辆车1；让停车小弟停车时；停车失败，返回“无停车场可用”

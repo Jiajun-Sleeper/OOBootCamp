@@ -2,7 +2,7 @@ package org.oobootcamp.core.parkinglot;
 
 import org.oobootcamp.core.parkinglot.Exceptions.CarNotFoundException;
 import org.oobootcamp.core.parkinglot.Exceptions.DuplicateParkingException;
-import org.oobootcamp.core.parkinglot.Exceptions.ParkingLotUnavailableException;
+import org.oobootcamp.core.parkinglot.Exceptions.ParkingLotIsFullException;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -29,7 +29,7 @@ public class ParkingLot {
 
     public Ticket park(Car car) {
         if (cars.size() == totalCount) {
-            throw new ParkingLotUnavailableException();
+            throw new ParkingLotIsFullException();
         }
         if (cars.stream().anyMatch(car1 -> car1.getCarNo().equals(car.getCarNo()))) {
             throw new DuplicateParkingException();
@@ -61,10 +61,10 @@ public class ParkingLot {
 
         @Override
         public int compare(ParkingLot val1, ParkingLot val2) {
-            return calculateVacancyRate(val1).compareTo(calculateVacancyRate(val2));
+            return calculateFreeParkingSpace(val1).compareTo(calculateFreeParkingSpace(val2));
         }
 
-        private static Integer calculateVacancyRate(ParkingLot parkingLot) {
+        private static Integer calculateFreeParkingSpace(ParkingLot parkingLot) {
             return parkingLot.getTotalCount() - parkingLot.getCars().size();
         }
 

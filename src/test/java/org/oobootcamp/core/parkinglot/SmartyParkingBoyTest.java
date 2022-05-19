@@ -2,7 +2,7 @@ package org.oobootcamp.core.parkinglot;
 
 import org.junit.jupiter.api.Test;
 import org.oobootcamp.core.parkinglot.Exceptions.InvalidTicketException;
-import org.oobootcamp.core.parkinglot.Exceptions.ParkingLotUnavailableException;
+import org.oobootcamp.core.parkinglot.Exceptions.ParkingLotIsFullException;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class SmartyParkingBoyTest {
     //Given：两个停车场1（容量为3，空的）、停车场2（容量为1，空的）和一辆车1
     //When： 让停车小弟停车时；
-    //Then：停车成功，获得停车场1的停车票1
+    //Then：停车成功，获得停车票，车停在停车场1
     @Test
     public void should_parking_in_parking_lot_1_given_parking_lot_1_with_3_free_space_and_parking_lot_2_with_1_free_space_and_a_car_when_smart_parking_boy_park_the_car() {
         //given
@@ -24,13 +24,13 @@ public class SmartyParkingBoyTest {
         //when
         Ticket ticket = parkingBoy.park(car);
         //then
-        assertThat(ticket.getCarNo()).isEqualTo(car.getCarNo());
+//        assertThat(ticket.getCarNo()).isEqualTo(car.getCarNo());
         assertThat(parkingLot1.pick(ticket)).isEqualTo(car);
     }
 
     //Given：两个停车场1（容量为1，空的）、停车场2（容量为3，空的）和一辆车1；
     //When：让停车小弟停车时；
-    //Then：停车成功，获得停车场2的停车票2
+    //Then：停车成功，获得停车票，车停在停车场2
     @Test
     public void should_parking_in_parking_lot_2_given_parking_lot_1_with_1_free_space_and_parking_lot_2_with_3_free_space_and_a_car_when_smart_parking_boy_park_the_car() {
         //given
@@ -48,7 +48,7 @@ public class SmartyParkingBoyTest {
 
     //Given：两个停车场1（容量为3，空的）、停车场2（容量为3，空的）和一辆车1；
     //When：让停车小弟停车时；
-    //Then：停车成功，获得停车场1的停车票1
+    //Then：停车成功，获得停车票，车停在停车场1
     @Test
     public void should_parking_in_parking_lot_1_given_parking_lot_1_with_3_free_space_and_parking_lot_2_with_3_free_space_and_a_car_when_smart_parking_boy_park_the_car() {
         //given
@@ -64,20 +64,21 @@ public class SmartyParkingBoyTest {
         assertThat(parkingLot1.pick(ticket)).isEqualTo(car);
     }
 
-    //Given：一个停车场1（容量为1，满的），和一辆车1；
+    //Given：停车场1（容量为1，满的），停车场2（容量为1，满的），和一辆车1；
     //When：让停车小弟停车时；
     //Then：停车失败，返回“无停车场可用”
     @Test
-    public void should_parking_failed_and_return_no_available_parking_lot_given_parking_lot_1_with_no_free_space_when_smart_parking_boy_park_the_car() {
+    public void should_parking_failed_and_return_parking_lot_is_full_exception_given_parking_lot_1_with_no_free_space_when_smart_parking_boy_park_the_car() {
         //given
         ParkingLot parkingLot1 = new ParkingLot(1);
         parkingLot1.park(new Car("any number"));
-        List<ParkingLot> parkingLots = List.of(parkingLot1);
+        ParkingLot parkingLot2 = new ParkingLot(1);
+        parkingLot2.park(new Car("any number1"));
+        List<ParkingLot> parkingLots = List.of(parkingLot1,parkingLot2);
         ParkingBoy parkingBoy = new SmartyParkingBoy(parkingLots);
         Car car = new Car("陕A T123");
-        //when
-        //then
-        assertThrows(ParkingLotUnavailableException.class, () -> parkingBoy.park(car));
+        //when & then
+        assertThrows(ParkingLotIsFullException.class, () -> parkingBoy.park(car));
     }
 
     //Given：两个停车场1（容量为1，满的）、停车场2（容量为1，满的）和一张停车票2（车2停在停车场2）；
@@ -96,7 +97,7 @@ public class SmartyParkingBoyTest {
         //when
         Car actualCar = parkingBoy.pick(ticket);
         //then
-        assertThat(actualCar).isEqualTo(expectedCar);
+        assertThat(actualCar).isSameAs(expectedCar);
     }
 
     //Given：给小弟一个停车场1（容量为1，满的），和一张无效停车票；
@@ -110,8 +111,7 @@ public class SmartyParkingBoyTest {
         List<ParkingLot> parkingLots = List.of(parkingLot1);
         ParkingBoy parkingBoy = new SmartyParkingBoy(parkingLots);
         Ticket ticket = new Ticket("invalid car number");
-        //when
-        //then
+        //when & then
         assertThrows(InvalidTicketException.class, () -> parkingBoy.pick(ticket));
     }
 }
