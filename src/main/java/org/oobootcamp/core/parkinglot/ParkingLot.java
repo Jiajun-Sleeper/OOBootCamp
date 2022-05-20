@@ -4,6 +4,8 @@ import org.oobootcamp.core.parkinglot.Exceptions.CarNotFoundException;
 import org.oobootcamp.core.parkinglot.Exceptions.DuplicateParkingException;
 import org.oobootcamp.core.parkinglot.Exceptions.ParkingLotIsFullException;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -56,17 +58,14 @@ public class ParkingLot {
         return cars.stream().anyMatch(car -> Objects.equals(car.getCarNo(), ticket.getCarNo()));
     }
 
-
-    public static class FreeParkingSpaceComparator implements Comparator<ParkingLot> {
+    public static class FreeParkingSpaceRateComparator implements Comparator<ParkingLot> {
 
         @Override
-        public int compare(ParkingLot val1, ParkingLot val2) {
-            return calculateFreeParkingSpace(val1).compareTo(calculateFreeParkingSpace(val2));
+        public int compare(ParkingLot parkingLot1, ParkingLot parkingLot2) {
+            return new BigDecimal(parkingLot1.totalCount - parkingLot1.cars.size()).divide(new BigDecimal(parkingLot1.totalCount), 2, RoundingMode.HALF_UP)
+                    .compareTo(new BigDecimal(parkingLot2.totalCount - parkingLot2.cars.size()).divide(new BigDecimal(parkingLot2.totalCount), 2, RoundingMode.HALF_UP));
         }
 
-        private static Integer calculateFreeParkingSpace(ParkingLot parkingLot) {
-            return parkingLot.getTotalCount() - parkingLot.getCars().size();
-        }
 
     }
 }

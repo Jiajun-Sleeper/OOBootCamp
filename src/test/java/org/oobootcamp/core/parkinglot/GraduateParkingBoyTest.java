@@ -2,7 +2,6 @@ package org.oobootcamp.core.parkinglot;
 
 import org.junit.jupiter.api.Test;
 import org.oobootcamp.core.parkinglot.Exceptions.InvalidTicketException;
-import org.oobootcamp.core.parkinglot.Exceptions.NoParkingPlantException;
 import org.oobootcamp.core.parkinglot.Exceptions.ParkingLotIsFullException;
 
 import java.util.ArrayList;
@@ -113,7 +112,7 @@ public class GraduateParkingBoyTest {
         String carNo = "陕A T234";
         Car car = new Car(carNo);
         //when
-        assertThrows(NoParkingPlantException.class, () -> parkingBoy.park(car));
+        assertThrows(ParkingLotIsFullException.class, () -> parkingBoy.park(car));
     }
 
     //给停车小弟三个停车场1（容量为1，满的）、停车场2（容量为1，满的）、停车场3（容量为1，满的），和一张停车票2（车2停在停车场2）；让停车小弟取车时；取车成功，获得车2

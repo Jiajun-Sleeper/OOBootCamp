@@ -75,7 +75,7 @@ public class SuperParkingBoyTest {
         parkingLot1.park(new Car("any number"));
         ParkingLot parkingLot2 = new ParkingLot(1);
         parkingLot2.park(new Car("any number1"));
-        List<ParkingLot> parkingLots = List.of(parkingLot1,parkingLot2);
+        List<ParkingLot> parkingLots = List.of(parkingLot1, parkingLot2);
         ParkingBoy parkingBoy = new SuperParkingBoy(parkingLots);
         Car car = new Car("陕A T123");
         //when & then

@@ -1,7 +1,6 @@
 package org.oobootcamp.core.parkinglot;
 
-import org.oobootcamp.core.parkinglot.Exceptions.ParkingLotIsFullException;
-
+import java.util.Comparator;
 import java.util.List;
 
 public class SmartyParkingBoy extends ParkingBoy {
@@ -11,10 +10,16 @@ public class SmartyParkingBoy extends ParkingBoy {
     }
 
     @Override
-    public Ticket park(Car car) {
-        return super.parkingLots.stream()
-                .max(new ParkingLot.FreeParkingSpaceComparator())
-                .orElseThrow(ParkingLotIsFullException::new)
-                .park(car);
+    protected Comparator<ParkingLot> parkingStrategy() {
+        return new FreeParkingSpaceNumberComparator();
+    }
+
+
+    public static class FreeParkingSpaceNumberComparator implements Comparator<ParkingLot> {
+
+        @Override
+        public int compare(ParkingLot parkingLot1, ParkingLot parkingLot2) {
+            return Integer.compare((parkingLot1.getTotalCount() - parkingLot1.getCars().size()), parkingLot2.getTotalCount() - parkingLot2.getCars().size());
+        }
     }
 }
